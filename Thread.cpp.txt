@@ -1,0 +1,58 @@
+#include <iostream>
+#include <thread>
+#include <chrono>
+//#include <algorithm>
+
+using namespace std;
+using namespace std::chrono;
+
+typedef unsigned long long ull;
+ull OddSum =0;
+ull EvenSum = 0;
+
+void odd_Sum(ull start, ull end)
+{
+    for(int i=start; i<=end; i++)
+    {
+        if((i & 1) ==1)
+        {
+           OddSum += i;
+        }
+    }
+}
+
+void even_Sum(ull start, ull end)
+{
+    for(int i=0; i<=end; i++)
+    {
+        if((1 & i) == 0)
+        {
+            EvenSum += i;
+        }
+    }
+}
+
+
+
+int main() {
+    ull start = 0, e = 1900000000;
+
+    auto startTime = high_resolution_clock::now();
+
+//    odd_Sum(start, e);
+//    even_Sum(start, e);
+
+    std::thread t1(odd_Sum, start, e);
+    std::thread t2(even_Sum, start, e);
+    t1.join();
+    t2.join();
+
+    auto stopTime = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stopTime - startTime);
+
+    cout << "EvenSum : " << EvenSum << endl;
+    cout << "OddSum  : " << OddSum << endl;
+
+    cout << "Time Consumed  :" << duration.count()/1000000 <<endl;
+    return 0;
+}
