@@ -12,18 +12,17 @@ class Base{
 
 class Derived : public Base
 {
-//	int x;
 	public:
-	void fun(int a)
+	void fun(int a) override
 	{
 		cout << "Derived class" << endl;
 	}
 };
 
 int main() {
-	// your code goes here
-	Base *b = new Derived();
-	b->fun(3);
+	Derived d;
+	Base &b = d;
+	b.fun(3);
 	
 	return 0;
 }
