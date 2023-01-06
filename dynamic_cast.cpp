@@ -39,3 +39,7 @@ int main() {
 	
 	return 0;
 }
+
+// const_cast<T>(v)
+// it is used to remove const ess of pointer variable
+// T must be reference or pointer or pointer to member type
