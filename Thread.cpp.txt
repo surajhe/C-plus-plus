@@ -56,3 +56,335 @@ int main() {
     cout << "Time Consumed  :" << duration.count()/1000000 <<endl;
     return 0;
 }
+
+
+
+
+std::try_lock() in C++ 11 Threading
+
+1. std::try_lock() tries to lock all the lockable objects passed in it one by one in given order.
+SYNTAX : std::try_lock(m1,m2,m3.....mn);
+
+2. on success this function returns -1 otherwise it will return 0-based mutex index number which it could not lock.
+3. if it fails to lock any of the mutex then it will release all the mutexes it locked before.
+4. if try_lock results in exception, unlock is called for any locked objects before rethrowing. 
+
+=================================================================================
+
+Timed Mutex
+
+std::time_mutex is blocked till timeout_time or the lock is acquired and returns true if success
+
+std::timed_mutex m;
+m.try_lock_for();
+wait until specified time is elapsed or lock is acquired, whichever comes first
+on successful acquisition returns true, otherwise returns false. 
+m.try_lock_until();
+
+============================================================================
+Recursive Mutex 
+
+std::recursive_mutex m;
+
+now thread can lock this recursive mutex as many times it can 
+
+=================================================================================
+lock_guard
+
+std::mutex m1;
+std::lock_guard<mutex> lock(m1);
+It acquires lock the moment you create the object of lock_guard
+it automatically removes lock while going out of scope
+you can not explicitly unlock the lock_guard
+
+=====================================================================================
+unique_lock
+
+std::mutex m1;
+std::unique_lock<mutex> lock(m1);
+- transfer of lock ownership (move not copy)
+- can have different locking strategies 
+1. defer_lock
+2. try_to_lock
+3. adopt_lock
+=========================================================================================
+
+Conditon Variable in Threading
+
+Condition variable allows running thread to wait on some condition and once those condition are met the waiting thread is notified using.
+
+1. notify some other thread
+2. waiting for some condition
+
+It is used for thread synchronisation ex. you can't withdraw money without adding money in balance.
+
+std::condition_variable cv;
+
+cv.notify_one();
+
+cv.wait(m1, []{return balanve!=0 ? true:false;});
+
+================================================================================
+
+std::lock()
+It tries to lock all mutexes in deadlock free manner
+
+std::lock(m1, m2, m3, m4);
+It tries to lock mutexes any order and ensures to avoid deadlock.
+It is a blocking call
+
+Thread 1                    ||    Thread 2
+std::lock(m1,m2)                  std::lock(m2,m1)
+
+std::lock(m1, m2, m3, m4)   ||    std::lock(m3,m4)
+                                  std::lock(m1,m2) 
+								  
+std::lock(m1,m2)                  std::lock(m3,m4)
+std::lock(m3,m4)				  std::lock(m1,m2)				  
+								  
+============================================================================								  
+std::future and std::promise in threading
+
+std::promise - used to set values or exceptions
+
+std::future 
+1. used to get values(future) from promise
+2. Ask promise if value is available
+3. wait for the promise
+
+#include <future>
+
+std::promise<ull> oddSum;
+std::future<ull> oddFut = oddSum.get_future();
+
+oddSum.set_value(sum);
+oddFut.get();
+========================================================================================
+
+std::async
+
+It runs a function asynchronously and returns a std::future that will hold the result
+there are 3 launch policies for creating task :
+a. std::launch::async   -> new thread is created
+b. std::launch::deferred -> no new thread is created
+c. std::launch::async | std::launch::deferred  -> cretion of thread is decided by OS
+
+It automatically creates and thread and promise object for us
+
+std::future<ull> oddSum = std::async(std::launch::deferred, findOdd, start, end);
+oddSum.get();
+
+========================================================================================
+Sleep vs wait in Threading
+
+sleep                            ||            wait
+It will keep the lock and sleep      It releases the lock and wait  
+sleep is directly applied            wait is on condition variable, it is like there is a condition variable in  
+on thread                            thread and wait is applied on that CV, it ends up puting thread in 
+                                     waiting state 
+                                     waiting thread need another thread to notify to wake up again	
+
+==============================================================================================
+
+Q1. Show implementation of a class and example of inheritance
+
+#include <iostream>
+using namespace std;
+
+// base class
+class Animal {
+
+   public:
+   
+	int age;
+	string color;
+	
+    void eat() {
+        cout << "I can eat!" << endl;
+    }
+
+    void sleep() {
+        cout << "I can sleep!" << endl;
+    }
+};
+
+// derived class
+class Dog : public Animal {
+ 
+   public:
+    void bark() {
+        cout << "I can bark!" << endl;
+    }
+};
+
+class Tiger : public Animal {
+ 
+   public:
+    void roar() {
+        cout << "I can roar!" << endl;
+    }
+};
+
+int main() {
+    // Create object of the Dog class
+    Dog dog1;
+	
+    dog1.eat();
+    dog1.sleep();
+
+    dog1.bark();
+    
+    // Create object of the Tiger class
+    Tiger tiger1;
+
+    tiger1.eat();
+    tiger1.sleep();
+
+    tiger1.roar();
+
+    return 0;
+}
+=====================================================================
+
+Q.2 Throw an exception, catch and handle the outcomes
+
+
+
+#include <iostream>
+
+using namespace std;
+
+
+int main() {
+	
+	int Age[5] = {-1, 108, 23, 0,  25};
+	
+	for(int i=0; i<5; i++)
+	{
+		int x = Age[i];
+		try{
+			if(x < 0 || x > 80)
+			throw "Invalid age entered";
+			
+			if(x == 0)
+			throw "Age can not be zero";
+		} catch(const char* exp)
+		{
+			cout << exp << endl;
+		}
+		
+		catch(...)
+		{
+			cout << "Invalid age Exception" << endl;
+		}
+	}
+	
+return 0;
+}
+
+===================================================================
+
+Q.3 Demonstrate a multithreading example to split some image         processing task over multiple threads
+
+
+#include <iostream>
+#include <thread>
+#include <wx/image.h>
+using namespace std;
+
+void ImageEnhancement(wxImage *img)
+{
+	cout << "image is enhanced by identifying hidden details" << endl;
+}
+
+void ImageColoring(wxImage *img)
+{
+	cout << "Color modes are applied to image" << endl;
+}
+
+void ImageCompression(wxImage *img)
+{
+	cout << "Image size reduced" << endl;
+}
+
+void ImageSegmentation(wxImage *img)
+{
+	cout << "Image is partitioned into it's  constituent parts or objects" << endl;
+}
+
+int main() {
+	
+	wxImage *loadedImage = new wxImage("Path of Image file");
+	
+	std::thread t1(ImageEnhancement, loadedImage);
+	std::thread t2(ImageColoring, loadedImage);
+	std::thread t3(ImageCompression, loadedImage);
+	std::thread t4(ImageSegmentation, loadedImage);
+	
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	
+	return 0;
+}
+
+======================================================================
+Q.4 Algorithm to detect visual defects
+    a. Component A.2 and A.3
+
+Q.5 A simple GRPC implementation with a client and server
+
+
+
+									 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
