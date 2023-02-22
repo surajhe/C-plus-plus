@@ -6,6 +6,7 @@
 // Set - Set stores unique elements following specific order -
 // stores elements in sorted order - uses BST for implementation
 // Unoredred_set - stores elements in unsorted order - uses Hash Table for implementation
+// search, insertion and removal have average constant-time complexity.
 // Multiset - it stores duplicate elements in sorted order - implemented using Red Black Tree (Self balanced BST)
 
 using namespace std;
