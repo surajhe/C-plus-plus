@@ -34,5 +34,19 @@ int main() {
 	{
 		cout << i <<endl;
 	}
+	
+	// std::is_sort
+	std::is_sort(Vec.begin(), Vec.end());
+	std::is_sort(Vec.begin(), Vec.end(), greater<int>());
+	
+	// std::nth_element
+	std::nth_element(Vec.begin(), Vec.begin()+3, Vec.end(), greated<int>()); //- to get 3rd largest element in vector. Vec[3]
+	std::nth_element(Vec.begin(), Vec.begin()+ Vec.size()/2); // to get median of vector Vec[Vec.size()/2]
+	
+	//is_sorted_until - it tells uptil where array is sorted and returns position
+	auto it = std::is_sorted_until(Vec.begin(), Vec.end());
+	auto diff = distance(Vec.begin(), it);
+	
+	
 	return 0;
 }
