@@ -60,6 +60,32 @@ int main() {
 
 
 
+when multiple threads are concurrently accessing
+==========================================================================================================================
+
+Atomic library in C++
+
+it guaranteed to not cause data races and can be used to synchronize memory accesses among different threads
+
+#include<atomic>
+
+std::atomic<int> count(0);
+
+here you don't need to put lock and unlock as they do take cre of synchronization by themselves.
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+Recursive Mutex 
+
+std::recursive_mutex m;
+
+now thread can lock this recursive mutex as many times it can 
+internally it keeps track of how many times it is locked by owning thread and it should be unlocked equal number of times by same thread.
+
+In your code if you have a section where you want to lock mutex multiple times then use recursive mutex.
+It must be used in recursive function calls if there is any critical section present there.
+
+==================================================================================================================================================
+
 std::try_lock() in C++ 11 Threading
 
 1. std::try_lock() tries to lock all the lockable objects passed in it one by one in given order.
@@ -69,7 +95,30 @@ SYNTAX : std::try_lock(m1,m2,m3.....mn);
 3. if it fails to lock any of the mutex then it will release all the mutexes it locked before.
 4. if try_lock results in exception, unlock is called for any locked objects before rethrowing. 
 
-=================================================================================
+std::mutex m;
+m.try_lock();
+try_lock is non-blocking version of mutex.
+
+=================================================================================================================================================
+#include<shared_mutex>
+std::shared_mutex m;
+m.lock_shared();
+m.unlock_shared();
+
+Shared Mutex(reader writer lock)
+
+Shared read - multiple threads at once
+Exclusive write - only one thread at a time.
+
+whenever you have many threads reading than writing then it is good to use shared mutex
+
+=================================================================================================================================================
+Scoped lock
+
+scoped lock is used to avoid dedalockstd::scoped_lock(mut1, mut2);  - unlocked automatically so no need to unlock explicitly
+it's scope is within the block.
+
+================================================================================================================================================
 
 Timed Mutex
 
@@ -82,13 +131,6 @@ on successful acquisition returns true, otherwise returns false.
 m.try_lock_until();
 
 ============================================================================
-Recursive Mutex 
-
-std::recursive_mutex m;
-
-now thread can lock this recursive mutex as many times it can 
-
-=================================================================================
 lock_guard
 
 std::mutex m1;
@@ -185,6 +227,253 @@ on thread                            thread and wait is applied on that CV, it e
                                      waiting thread need another thread to notify to wake up again	
 
 ==============================================================================================
+
+Q1. Show implementation of a class and example of inheritance
+
+#include <iostream>
+using namespace std;
+
+// base class
+class Animal {
+
+   public:
+   
+	int age;
+	string color;
+	
+    void eat() {
+        cout << "I can eat!" << endl;
+    }
+
+    void sleep() {
+        cout << "I can sleep!" << endl;
+    }
+};
+
+// derived class
+class Dog : public Animal {
+ 
+   public:
+    void bark() {
+        cout << "I can bark!" << endl;
+    }
+};
+
+class Tiger : public Animal {
+ 
+   public:
+    void roar() {
+        cout << "I can roar!" << endl;
+    }
+};
+
+int main() {
+    // Create object of the Dog class
+    Dog dog1;
+	
+    dog1.eat();
+    dog1.sleep();
+
+    dog1.bark();
+    
+    // Create object of the Tiger class
+    Tiger tiger1;
+
+    tiger1.eat();
+    tiger1.sleep();
+
+    tiger1.roar();
+
+    return 0;
+}
+=====================================================================
+
+Q.2 Throw an exception, catch and handle the outcomes
+
+
+
+#include <iostream>
+
+using namespace std;
+
+
+int main() {
+	
+	int Age[5] = {-1, 108, 23, 0,  25};
+	
+	for(int i=0; i<5; i++)
+	{
+		int x = Age[i];
+		try{
+			if(x < 0 || x > 80)
+			throw "Invalid age entered";
+			
+			if(x == 0)
+			throw "Age can not be zero";
+		} catch(const char* exp)
+		{
+			cout << exp << endl;
+		}
+		
+		catch(...)
+		{
+			cout << "Invalid age Exception" << endl;
+		}
+	}
+	
+return 0;
+}
+
+===================================================================
+
+Q.3 Demonstrate a multithreading example to split some image         processing task over multiple threads
+
+
+#include <iostream>
+#include <thread>
+#include <wx/image.h>
+using namespace std;
+
+void ImageEnhancement(wxImage *img)
+{
+	cout << "image is enhanced by identifying hidden details" << endl;
+}
+
+void ImageColoring(wxImage *img)
+{
+	cout << "Color modes are applied to image" << endl;
+}
+
+void ImageCompression(wxImage *img)
+{
+	cout << "Image size reduced" << endl;
+}
+
+void ImageSegmentation(wxImage *img)
+{
+	cout << "Image is partitioned into it's  constituent parts or objects" << endl;
+}
+
+int main() {
+	
+	wxImage *loadedImage = new wxImage("Path of Image file");
+	
+	std::thread t1(ImageEnhancement, loadedImage);
+	std::thread t2(ImageColoring, loadedImage);
+	std::thread t3(ImageCompression, loadedImage);
+	std::thread t4(ImageSegmentation, loadedImage);
+	
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	
+	return 0;
+}
+
+=========================================================================================================
+Q.4 Algorithm to detect visual defects
+    a. Component A.2 and A.3
+
+Q.5 A simple GRPC implementation with a client and server
+
+to make system call make use of open source library
+system calls inherently clash with the Qt framework
+short circuits the entire event loop
+disrupts the scheduler
+
+QProcess - to implement system calls within Qt framework
+used to start external process
+Can also communicate with them
+
+QProcess m_bashProcess;
+// How to envoke system calls
+QByteArray command;
+command.append("--------------");
+
+m_bashProcess.write(command);
+=====================================================================================================================
+
+Model based HMI developemnt -
+Process to validate the whole system based on the mathematical models even before the hardware is manufactured.
+It allows you to design your HMI and validate in adavance the deploy on real target hardware. 
+Embedded iMX8
+
+Model based design
+
+Model in MATLAB Simulink and it can communicate to QT UI with TCP communication
+Model send the signal to Application and application back to model.
+
+Qt block set library of simulink
+Qt application and the car model is connected via the local tcp socket.
+dashboard HMI
+
+===================================================================================================
+
+Chargepoint EV charging
+
+Qt web assembly to build public website
+
+Chargepoint is EV solution provider AC/DC
+we make EV charging station to charge EV at home-work-all the travel
+
+built using QT/QML - single codebase is running on all ChargePoint stations
+It supports layout and physical buttons and touchscreens
+Scalable UI to support multiple display resolutions
+
+D-bus is used to talk with system services on station and QT UI
+
+
+====================================================================================================
+QML hot realod with Felgo live
+
+code hot reload saves hours of development by removing waiting time for building & deployment
+hot reload applies to individual changes and keeps the existing QML items alive.
+Hot reload applies code changes without losing the current application state and context.
+
+
+Designing an HMI (Human-Machine Interface) for an electric vehicle (EV) involves creating a user-friendly interface that allows drivers to control and monitor various systems within the vehicle. The following are key elements to consider when designing an HMI for an EV:
+
+Driver displays: This includes a speedometer, battery gauge, and other driving-related information.
+
+Climate control: This allows drivers to adjust the temperature and ventilation settings within the vehicle.
+
+Infotainment system: This includes a touch screen display that offers audio and video entertainment, navigation, and communication options.
+
+Driving modes: This allows the driver to select different driving modes such as Eco, Sport, and Normal to optimize the vehicle's performance and range.
+
+Battery management: This displays the battery's current state of charge, estimated range, and charging status.
+
+Safety systems: This includes alerts and warnings for potential safety issues, such as low tire pressure or blind spot detection.
+
+User customization: Drivers should be able to customize the HMI display to their preferences, including color themes, font size, and arrangement of information.
+
+It's important to keep the HMI design simple, intuitive, and easy to use. This will help drivers focus on driving and reduce distractions, improving overall safety.
+
+
+=======================================================================================================================================
+
+Model-View-Controller (MVC): This pattern separates the application logic, the user interface, and the data, making it easier to develop, test, and maintain the code.
+
+Singleton: This pattern ensures that a class has only one instance, while providing a global point of access to it. It is often used for managing system resources or configuration data.
+
+Observer: This pattern defines a one-to-many dependency between objects, so that when one object changes, all of its dependents are notified and updated automatically.
+
+Factory: This pattern provides a way to create objects without specifying the exact class of object that will be created.
+
+State: This pattern allows an object to alter its behavior when its internal state changes.
+
+Command: This pattern encapsulates a request as an object, allowing for the separation of the request from the object that implements it.
+
+Decorator: This pattern dynamically adds behavior to an individual object, either statically or dynamically, without affecting the behavior of other objects from the same class.
+
+Template Method: This pattern defines the steps of an algorithm and allows subclasses to provide their own implementation of one or more steps.
+
+Iterator: This pattern provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation.
+
+These design patterns can be used to solve common problems in embedded systems development and help to maintain a clean and organized codebase.
+
+
 
 Q1. Show implementation of a class and example of inheritance
 
