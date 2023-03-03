@@ -58,7 +58,9 @@ int main() {
 }
 
 
-
+either join() or detach should be called on thread object otherwise during thread objects destructor it will
+terminate the program. Because inside destructor it checks if thread is still joinable. 
+If yes then it terminates the program.
 
 when multiple threads are concurrently accessing
 ==========================================================================================================================
