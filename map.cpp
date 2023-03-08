@@ -31,7 +31,11 @@ public:
 
 int main()
 {
-    multimap<string, int> mm;
-    mm.insert(make_pair("Suraj", 32));
+    multimap<string, int, greater<>> mm = {{"suraj", 32}, {"mahesh", 23}, {"ganesh", 13}};
+    
+    for(auto i:mm)
+    {
+        cout << i.first << "  " <<i.second <<endl;
+    }
     return 0;
 }
