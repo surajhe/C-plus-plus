@@ -260,80 +260,83 @@ TreeNode* inorder_traversal(TreeNode* root)
             curr = curr->right;
         }
 // ==========================================================================
-      
-      
-    void fun1
+            
+#include <iostream>
+#include <vector>
+#include <thread>
+
+using namespace std;
+
+int result;
+
+void fun1()
+{
+    // algorithm implementation
+    cout << "Algo 1" <<endl;
+    result = 1;
+}
+
+void fun2()
+{
+    while(result != 1)
     {
-        // implementation
-        result  = 1;
+        std::this_thread::yield();
     }
-    void fun2
+    cout << "Algo 2" <<endl;
+    // algorithm implementation
+    result = 2;
+}
+
+void fun3()
+{
+    while(result != 2)
     {
-        while(result != 1)
-        {
-            std::this_thread::yield();
-        }
-
-        // implementation
-
-        result = 2;
+        std::this_thread::yield();
     }
-    void fun3
+    cout << "Algo 3" <<endl;
+    // algorithm implementation
+    result = 3;
+}
+
+void fun4()
+{
+    while(result != 3)
     {
-        while(result != 2)
-        {
-            std::this_thread::yield();
-        }
-
-        // implementation
-
-        result = 3;
+        std::this_thread::yield();
     }
-    void fun4
+    cout << "Algo 4" <<endl;
+    // algorithm implementation
+    result = 4;
+}
+
+void fun5()
+{
+    while(result != 4)
     {
-            while(result != 3)
-            {
-                std::this_thread::yield();
-            }
-
-            // implementation
-
-            result = 4;
-
+        std::this_thread::yield();
     }
-    void fun5
-    {
-            while(result != 4)
-            {
-                std::this_thread::yield();
-            }
+    cout << "Algo 5" <<endl;
+    // algorithm implementation
+}
 
-            // implementation
+int main()
+{
+    result = 0;
+    std::thread t1(fun1);
+    std::thread t2(fun2);
+    std::thread t3(fun3);
+    std::thread t4(fun4);
+    std::thread t5(fun5);
 
-            //result = 3;
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
+    t5.join();
 
-    }
+    return 0;
+}
 
-
-
-    int main()
-    {
-        int result = 0;
-
-        std::thread t1(fun1);
-        std::thread t1(fun2);
-        std::thread t1(fun3);
-        std::thread t1(fun4);
-        std::thread t1(fun5);
-
-        t1.join();
-        t2.join();
-        t3.join();
-        t4.join();
-        t5.join();
-
-        return 0;
-    }
 ===================================================================================================
 
     void sum(std::promise<int>&& promise, int num)
