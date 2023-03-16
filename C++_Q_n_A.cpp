@@ -233,21 +233,55 @@ std::scoped_lock(m1,m2); - it acquire mutexes deadlock free manner
 std::lock(m1,m2);
 std::try_lock(m1,m2);l
 
-==================================================================================
+===========================================================================================================================================
+
+#include <iostream>
+#include <thread>
+#include <mutex>
+
+using namespace std;
+
+std::once_flag flag;
+
+void fun_once()
+{
+    cout << "fun_once called" <<endl;
+}
+
+void fun1()
+{
+    cout << "fun1 called" <<endl;
+    std::call_once(flag, fun_once);
+}
+
+int main()
+{
+    std::thread t1(fun1);
+    std::thread t2(fun1);
+    std::thread t3(fun1);
+
+    t1.join();
+    t2.join();
+    t3.join();
+
+    return 0;
+}
+
+===========================================================================================================================================
 What is std::promises used for ?
 
 std::promise is a C++ class template that provides a way to communicate a value or an exception between two threads. 
 It is part of the C++11 standard library and is typically used in conjunction with std::future, which is used to retrieve the value or 
 exception from the std::promise object.
 
-============================================================================================================
+===========================================================================================================================================
 What is std::future used for ?
 
 std::future is a C++ class template that represents a value that may not yet be available. 
 It is part of the C++11 standard library and is typically used in conjunction with std::promise, 
 which is used to set the value of the future.
 
-====================================================================================================
+============================================================================================================================================
 packaged_task - 
 
 std::packaged_task allows you to associate a function with a future object.
@@ -264,8 +298,8 @@ int sum(int val)
         return sum;
     }
 
-    std::packaged_task<int> tsk(sum);
-    std::future<int> fut = tsk.get_value();
+    std::packaged_task<int(int)> tsk(sum);
+    std::future<int> fut = tsk.get_future();
 
     std::thread t1(std::move(tsk), 10);
 
@@ -308,6 +342,28 @@ void fun(exception_ptr& excpt)
     }
 
 =========================================================================================================================
+Does adding multithreading always improve the result?
+
+Adding multithreading to a C++ program does not always guarantee an improvement in the program's performance. 
+Whether or not multithreading improves the result depends on various factors such as the nature of the program, the type of workload, 
+the number of cores/threads available, and the way threads are synchronized.
+
+Multithreading can improve the performance of a C++ program if it has a lot of CPU-bound tasks that can be split into smaller pieces 
+and executed in parallel. For example, if you have a program that performs a lot of mathematical calculations, you can divide the workload 
+into multiple threads and execute them concurrently on different cores. In this case, multithreading can significantly speed up the program's 
+execution.
+
+However, if a program has a lot of I/O-bound tasks, such as reading and writing data from/to a disk or a network, adding multithreading may not 
+improve the performance as much. This is because the threads would end up waiting for I/O operations to complete, which may reduce the overall 
+performance of the program.
+
+Another factor to consider is the overhead of managing threads, which can also affect the program's performance. Creating and synchronizing 
+threads can take up additional CPU cycles and memory, which may offset the benefits of multithreading in some cases.
+
+In summary, whether or not multithreading improves the result of a C++ program depends on the specific details of the program and the workload. 
+Proper analysis and profiling can help determine whether adding multithreading would be beneficial or not.
+
+=========================================================================================================================
 
 What are coroutines in C++
 
@@ -315,10 +371,11 @@ Coroutines in C++ are a way of implementing cooperative multitasking. They allow
 and then resumed later from where it left off. 
 This is achieved by creating a special type of function called a coroutine, which can be suspended and resumed at specific points in its execution.
 
-Coroutines were introduced in C++20 as part of the standard library. They provide a powerful tool for writing asynchronous code, such as networking or GUI applications. 
-Coroutines can be used to write non-blocking code that can perform I/O operations without blocking the execution of other code.
+Coroutines were introduced in C++20 as part of the standard library. They provide a powerful tool for writing asynchronous code, such as networking 
+or GUI applications. Coroutines can be used to write non-blocking code that can perform I/O operations without blocking the execution of other code.
 
-Coroutines in C++ are implemented using a new keyword called co_await, which is used to suspend the execution of a coroutine and wait for a particular operation to complete. 
+Coroutines in C++ are implemented using a new keyword called co_await, which is used to suspend the execution of a coroutine and wait for a 
+particular operation to complete. 
 The co_yield keyword is used to return a value from a coroutine and suspend its execution until it is resumed.
 
 Here's a simple example of a coroutine in C++:
