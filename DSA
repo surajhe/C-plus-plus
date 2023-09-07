@@ -1,0 +1,83 @@
+Hash table ?
+It is method for storing and retrieving data from database in o(1) time.
+
+hash functions - k%10, k%n, folding method 
+It takes user input(key) and internally uses hash function to generate index and that key is stored at that index. 
+
+collision  - chaining
+
+hashkey = hash table
+
+
+
+====================================================================================================================================================
+
+As a data container, what are the main differences between array and list?
+
+Data Type: An array is a collection of similar data types, while a list can store any data type.
+
+Memory allocation: Arrays are contiguous blocks of memory allocated during initialization, whereas a list is a dynamic data 
+structure that can grow or shrink as needed.
+
+Accessing Elements: In an array, elements are accessed using an index, whereas in a list, elements are accessed using iterators, 
+pointers or by using the built-in functions.
+
+Size: The size of an array is fixed at the time of creation and cannot be changed, whereas a list can grow or shrink dynamically.
+
+Insertion and Deletion: Adding or removing elements from an array is a complex process that requires moving elements to make room for new data, 
+whereas adding or removing elements from a list is relatively simple and does not require any such movements.
+
+Speed: Arrays offer faster access to elements than lists because they use contiguous memory and can be optimized for caching. However, 
+lists are faster at inserting and deleting elements, especially in the middle of the container.
+
+In summary, arrays are ideal for situations where the size of the data is known and fixed, and fast access to individual elements is required. 
+Lists, on the other hand, are better suited for situations where data can be dynamically added or removed, and the order of the elements is 
+not important.
+
+STL in C++
+
+sequential containers              associative containers
+
+vector                             map
+list                               unordered_map
+stack                              multimap
+queue                              unordered_multimap
+forward_list                       set
+								   unordered_set
+                                   multiset
+                                   unordered_multiset			
+
+Binary tree applications ?
+
+Binary trees are used in many applications, such as representing hierarchical data, sorting, searching, and expression evaluation.
+
+
+What is the search time complexity for binary tree? Why? Is it guaranteed?								   
+If the binary tree is balanced, then the search time complexity can be significantly reduced.
+The time complexity is not guaranteed in the sense that it depends on the shape of the tree.
+
+Sorting Algorithms-
+
+Merge Sort - Divide and conquer
+
+==========================================================================================================
+What is the difference between depth-first and breadth-first searches for binary tree?
+
+In DFS, the algorithm visits the nodes in depth-first order, i.e., it starts from the root node and explores as far as possible 
+along each branch before backtracking. There are three types of DFS: pre-order traversal, in-order traversal, and post-order traversal. 
+In pre-order traversal, the algorithm visits the current node, then recursively visits the left and right subtrees. In in-order traversal, 
+the algorithm visits the left subtree, then the current node, then the right subtree. In post-order traversal, the algorithm visits the left and 
+right subtrees before the current node.
+
+
+In BFS, the algorithm visits the nodes in breadth-first order, i.e., it visits all the nodes at a given depth before moving on to the nodes 
+at the next depth. BFS uses a queue data structure to keep track of the nodes to be visited. The algorithm starts by adding the root node to 
+the queue, and then repeatedly dequeues a node, visits it, and enqueues its child nodes until the queue is empty.
+
+
+
+
+
+
+
+
