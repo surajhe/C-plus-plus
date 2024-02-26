@@ -61,3 +61,16 @@ Hds::Status LoadFromFile(Point3D& seedPoint, Vector3D& rayDirection, Hds::Array&
 15588
 15076
 15504
+===================================================================================
+--------------------------------  WRITE TO FILE  ------------------------------
+
+#include <fstream>
+  
+  std::fstream logFile;
+  logFile.open("D:\\logfile.log", std::fstream::out | std::fstream::trunc);
+    logFile << "=============================================\n";
+    logFile << "Polygon id: " << polygonId << std::endl;
+    logFile << "polygonCenter: " << currentCell.center.x() << ", " << currentCell.center.y() << ", " <<
+            currentCell.center.z() << std::endl;
+
+logFile.close();
