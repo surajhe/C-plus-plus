@@ -1,0 +1,64 @@
+What is the difference between a point and a vector?
+
+In summary, a point is a specific location in space, while a vector represents a direction and magnitude. Points can be added or 
+subtracted from each other, while vectors can be added or subtracted from other vectors.
+(x,y) -> (x,y,z) A+B-->
+====================================================
+What is the dot product of two vectors? List its properties ?
+scaler product - product of magnitude of vector A and vector B
+a.b = |a|.|b| cosA
+
+a.b = b.a
+a.(b+c) = ab+bc
+a.a = a2
+==========================================================
+How do you check if two vectors are parallel/orthogonal?
+
+|a|.|b| cos(A) = |a|.|b|  = orthogonal
+|a|.|b| cos(A) = 0 = perpandicular
+
+========================================================================
+How do you find a projection of one vector onto the direction of another vector?
+
+projection of u on direction of v let' call p
+
+p = ((u.v)/|v|^2)v
+
+====================================================================
+What is the cross product? List its properties ?
+
+|A|x|B| = |A||B| sin(A) n - direction of cross product is determined by right-hand rule
+AxB = -BxA
+
+============================================================
+How do you compute an angle between two vectors?
+
+a.b = |A||B|cos(A)
+
+A = cos-1 ((a.b/|A||B|))
+
+=======================================================================
+How do you compute a signed angle measured from vector A to vector B on a 3D plane containing both vectors?
+using dot product and cross product.
+
+=============================================================
+How to check if three vectors are coplanar?
+
+if (AxB).C = 0; A.(BxC) = 0; mixed product/scaler triple product
+======================================================
+What is the mixed product of three vectors? What is its geometric sense?
+
+scaler triple product
+(AxB).C = A.(BxC)
+
+
+
+
+
+
+
+
+
+
+
+
