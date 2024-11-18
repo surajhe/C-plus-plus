@@ -1,0 +1,106 @@
+concurrency : Multiple things can happen at once, the order matters, and sometimes tasks have to wait on shared resources.
+Parallelism : Everything happens at once, instantaneously.
+
+
+    void fun1
+    {
+        // implementation
+        result  = 1;
+    }
+    void fun2
+    {
+        while(result != 1)
+        {
+            std::this_thread::yield();
+        }
+
+        // implementation
+
+        result = 2;
+    }
+    void fun3
+    {
+        while(result != 2)
+        {
+            std::this_thread::yield();
+        }
+
+        // implementation
+
+        result = 3;
+    }
+    void fun4
+    {
+            while(result != 3)
+            {
+                std::this_thread::yield();
+            }
+
+            // implementation
+
+            result = 4;
+
+    }
+    void fun5
+    {
+            while(result != 4)
+            {
+                std::this_thread::yield();
+            }
+
+            // implementation
+
+            //result = 3;
+
+    }
+
+
+
+    int main()
+    {
+        int result = 0;
+
+        std::thread t1(fun1);
+        std::thread t1(fun2);
+        std::thread t1(fun3);
+        std::thread t1(fun4);
+        std::thread t1(fun5);
+
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+        t5.join();
+
+        return 0;
+    }
+===================================================================================================
+
+    void sum(std::promise<int>&& promise, int num)
+    {
+        int sum;
+        while(num-- > 1)
+        {
+            sum += sum;
+        }
+
+        promise.set_value(sum);
+
+    }
+
+    int main()
+    {
+        std::promise<int> _promise;
+        std::future<int> future = _promise.get_future();
+        int val = 10;
+
+        std::thread t1(sum, std::move(_promise), val);
+
+        cout << future.get() <<endl;
+
+        t1.join();
+
+        return 0;
+    }
+
+========================================================================================	
